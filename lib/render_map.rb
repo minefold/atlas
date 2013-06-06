@@ -1,6 +1,7 @@
 require 'sidekiq'
 require 'tmpdir'
 require 'tempfile'
+require 'rest_client'
 
 $:.unshift(File.expand_path('..', __FILE__))
 
@@ -16,7 +17,6 @@ class RenderMapWorker
     ENV['AWS_SECRET_ACCESS_KEY'] = ENV['AWS_SECRET_KEY']
 
     chtmpdir do |dir|
-      puts "#{`pwd`.strip}"
       chmkdir('snapshot') do
         restore_snapshot(snapshot_url)
       end
