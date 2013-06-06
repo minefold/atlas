@@ -53,10 +53,11 @@ EOS
 
      {
             markers: markers,
-           tileSize: tileSize,
-         zoomLevels: zoomLevels
+           tile_size: tileSize,
+         zoom_levels: zoomLevels
      }
    rescue
+     # TODO sometimes map data extraction fails, needs more investigation
    end
   end
 

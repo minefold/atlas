@@ -28,7 +28,7 @@ class RenderMapWorker
         upload_tiles(id)
       end
 
-      push_map_data('tiles')
+      notify_map_rendered(id, snapshot_url, 'tiles')
 
       chmkdir('tiles/smooth_lighting') do
         archive_tile_cache(id)
@@ -81,9 +81,19 @@ class RenderMapWorker
       "s3://minefold-production-maps/#{id}/"])
   end
 
-  def push_map_data(tile_dir)
-    if data = Overviewer.map_data(tile_dir)
-      puts data.inspect
-    end
+  def notify_map_rendered(id, snapshot_url, tile_dir)
+    payload = {
+      event: 'map_rendered',
+      id: id,
+      snapshot_url: snapshot_url,
+      created: Time.now.to_i,
+      map_data: Overviewer.map_data(tile_dir) || {}
+    }
+    RestClient.post(
+      'https://minefold.com/webhooks/atlas',
+      payload.to_json,
+      :content_type => :json,
+      :accept => :json
+    )
   end
 end
