@@ -14,9 +14,10 @@ bash "install partycloud tools" do
   not_if "which restore-dir"
 end
 
+minecraft_home = "/home/#{node[:atlas][:user]}/.minecraft"
 bash "install minecraft client" do
-  code 'wget -N http://s3.amazonaws.com/MinecraftDownload/minecraft.jar -P /home/vagrant/.minecraft/bin/'
-  not_if { ::File.exists?('/home/vagrant/.minecraft/bin/minecraft.jar') }
+  code "wget -N http://s3.amazonaws.com/MinecraftDownload/minecraft.jar -P #{minecraft_home}/bin/"
+  not_if { ::File.exists?("#{minecraft_home}/bin/minecraft.jar") }
 end
 
 easy_install_package "boto"

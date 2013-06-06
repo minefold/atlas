@@ -21,6 +21,9 @@ Vagrant.configure("2") do |config|
     chef.add_recipe "atlas"
 
     chef.json = {
+      atlas: {
+        user: 'vagrant'
+      },
       s3cmd: {
         users: ['vagrant'],
         aws_access_key_id: ENV['AWS_ACCESS_KEY'],
