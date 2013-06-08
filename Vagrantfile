@@ -1,10 +1,5 @@
 Vagrant.configure("2") do |config|
-  config.vm.provider :aws do |aws|
-    aws.access_key_id = ENV['AWS_ACCESS_KEY']
-    aws.secret_access_key = ENV['AWS_SECRET_KEY']
-    aws.region = "us-east-1"
-    aws.region_config "us-east-1", :ami => "ami-bef924d7"
-  end
+  config.berkshelf.enabled = true
 
   config.vm.provider :virtualbox do |vb|
     config.vm.box = "quantal"
@@ -12,7 +7,7 @@ Vagrant.configure("2") do |config|
     config.vm.network :forwarded_port, guest: 6100, host: 6100
   end
 
-  config.berkshelf.enabled = true
+  config.vm.provision :shell, inline: "apt-get install ruby1.9.1-dev; gem install chef --version 11.4.2 --no-rdoc --no-ri --conservative"
 
   config.vm.provision :chef_solo do |chef|
     chef.add_recipe "apt"
@@ -21,6 +16,9 @@ Vagrant.configure("2") do |config|
     chef.add_recipe "atlas"
 
     chef.json = {
+      overviewer: {
+        rev: 'a147ca4a361055ee196dfc9194b4a3df2bd156dc',
+      },
       atlas: {
         user: 'vagrant'
       },
