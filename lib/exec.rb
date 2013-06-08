@@ -14,6 +14,7 @@ class Exec
           yield io.pid, line if block_given?
         end
       rescue Timeout::Error
+        puts "Timeout killing process #{io.pid}"
         Process.kill('TERM', io.pid)
         raise ProcessTimeout
       end

@@ -1,5 +1,4 @@
 require 'sidekiq'
-require 'tmpdir'
 require 'tempfile'
 require 'rest_client'
 
@@ -16,7 +15,8 @@ class RenderMapWorker
     ENV['AWS_ACCESS_KEY_ID'] = ENV['AWS_ACCESS_KEY']
     ENV['AWS_SECRET_ACCESS_KEY'] = ENV['AWS_SECRET_KEY']
 
-    chtmpdir do |dir|
+    tmp_dir = "/tmp/#{id}-#{Time.now.to_i}"
+    chmkdir(tmp_dir) do |dir|
       chmkdir('snapshot') do
         restore_snapshot(snapshot_url)
       end
@@ -34,17 +34,14 @@ class RenderMapWorker
         archive_tile_cache(id)
       end
     end
+
+  ensure
+    FileUtils.rm_rf(tmp_dir)
   end
 
   def chmkdir(dir, &blk)
     FileUtils.mkdir_p(dir)
     Dir.chdir(dir, &blk)
-  end
-
-  def chtmpdir(&blk)
-    Dir.mktmpdir do |dir|
-      Dir.chdir(dir, &blk)
-    end
   end
 
   def restore_snapshot(url)
@@ -68,10 +65,10 @@ class RenderMapWorker
 
   def upload_tiles(id)
     # parallel upload tiles
-    Exec.run(["s3-parallel-put",
-      "--bucket=minefold-production-maps",
-      "--prefix=#{id}",
-      "."])
+    # Exec.run(["s3-parallel-put",
+    #   "--bucket=minefold-production-maps",
+    #   "--prefix=#{id}",
+    #   "."])
 
     # clean up deleted tiles
     Exec.run(["s3cmd",
