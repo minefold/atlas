@@ -74,6 +74,7 @@ class RenderMapWorker
     Exec.run(["s3cmd",
       "sync",
       "--delete-removed",
+      "--acl-public",
       ".",
       "s3://minefold-production-maps/#{id}/"])
   end
