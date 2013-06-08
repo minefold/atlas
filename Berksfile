@@ -1,6 +1,6 @@
 site :opscode
 
 cookbook 'apt'
-cookbook 'overviewer', path: '../chef/overviewer' # github: 'minefold/chef-overviewer'
+cookbook 'overviewer', github: 'minefold/chef-overviewer' # path: '../chef/overviewer'
 cookbook 's3cmd', github: 'freerobby/s3cmd'
 cookbook 'atlas', path: 'cookbooks/atlas'
