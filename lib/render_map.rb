@@ -88,6 +88,7 @@ class RenderMapWorker
       created: Time.now.to_i,
       map_data: Overviewer.map_data(tile_dir) || {}
     }
+    puts payload.inspect
     RestClient.post(
       'https://minefold.com/webhooks/atlas',
       payload.to_json,

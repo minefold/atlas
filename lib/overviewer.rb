@@ -14,14 +14,10 @@ rendermode = "smooth_lighting"
 worlds['world'] = "#{level_dir}"
 outputdir = '#{tile_dir}'
 
-def signFilter(poi):
-  "All signs"
-  return poi['id'] == 'Sign'
-
 renders["smooth_lighting"] = {
   'world': 'world',
   'title' : 'honey badger',
-  'markers': [dict(name="All signs", filterFunction=signFilter)]
+  'markers': []
 }
 
 EOS
