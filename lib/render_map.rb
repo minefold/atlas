@@ -2,6 +2,7 @@ require 'sidekiq'
 require 'tempfile'
 require 'rest_client'
 
+
 $:.unshift(File.expand_path('..', __FILE__))
 
 require 'exec'
@@ -36,7 +37,7 @@ class RenderMapWorker
     end
 
   ensure
-    FileUtils.rm_rf(tmp_dir)
+    FileUtils.rm_rf(tmp_dir) if tmp_dir
   end
 
   def chmkdir(dir, &blk)
