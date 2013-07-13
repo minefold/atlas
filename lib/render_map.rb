@@ -10,6 +10,7 @@ require 'overviewer'
 
 class RenderMapWorker
   include Sidekiq::Worker
+  sidekiq_options retry: false
 
   def perform(id, snapshot_url)
     # boto library uses different ENV vars from PC tools
